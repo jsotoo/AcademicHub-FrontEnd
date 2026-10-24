@@ -1,0 +1,160 @@
+<section class="teacher-form-page">
+    <app-page-header [title]="title" [description]="description">
+      <a mat-stroked-button routerLink="/teachers">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </a>
+    </app-page-header>
+  
+    @if (loadingData()) {
+      <mat-progress-bar class="teacher-form-page__progress" mode="indeterminate" />
+    }
+  
+    <form [formGroup]="form" (ngSubmit)="submit()" class="teacher-form" novalidate>
+      @if (!isEditMode) {
+        <section class="form-card">
+          <header class="form-card__header">
+            <span class="form-card__icon" aria-hidden="true">
+              <mat-icon>lock</mat-icon>
+            </span>
+            <div>
+              <h2>Access credentials</h2>
+              <p>Username and password for the teacher's first sign-in.</p>
+            </div>
+          </header>
+  
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Username</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
+              <input matInput formControlName="userName" maxlength="100" autocomplete="off" />
+              @if (form.controls.userName?.hasError('required')) {
+                <mat-error>Username is required</mat-error>
+              }
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <mat-icon matPrefix>key</mat-icon>
+              <input
+                matInput
+                formControlName="password"
+                [type]="hidePassword() ? 'password' : 'text'"
+                autocomplete="new-password"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="hidePassword.set(!hidePassword())"
+                [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+              >
+                <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (form.controls.password?.hasError('required')) {
+                <mat-error>Password is required</mat-error>
+              } @else if (form.controls.password?.hasError('minlength')) {
+                <mat-error>Minimum 8 characters</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </section>
+      }
+  
+      <section class="form-card">
+        <header class="form-card__header">
+          <span class="form-card__icon" aria-hidden="true">
+            <mat-icon>badge</mat-icon>
+          </span>
+          <div>
+            <h2>Personal information</h2>
+            <p>Contact details stored with the teacher profile.</p>
+          </div>
+        </header>
+  
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName" maxlength="100" />
+            @if (form.controls.firstName.hasError('required')) {
+              <mat-error>First name is required</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName" maxlength="100" />
+            @if (form.controls.lastName.hasError('required')) {
+              <mat-error>Last name is required</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <mat-icon matPrefix>mail</mat-icon>
+            <input matInput type="email" formControlName="email" maxlength="200" />
+            @if (form.controls.email.hasError('required')) {
+              <mat-error>Email is required</mat-error>
+            } @else if (form.controls.email.hasError('email')) {
+              <mat-error>Enter a valid email</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Phone number</mat-label>
+            <mat-icon matPrefix>call</mat-icon>
+            <input matInput formControlName="phoneNumber" maxlength="20" />
+            @if (form.controls.phoneNumber.hasError('required')) {
+              <mat-error>Phone number is required</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address</mat-label>
+            <mat-icon matPrefix>home</mat-icon>
+            <input matInput formControlName="address" maxlength="100" />
+            @if (form.controls.address.hasError('required')) {
+              <mat-error>Address is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </section>
+  
+      <section class="form-card">
+        <header class="form-card__header">
+          <span class="form-card__icon" aria-hidden="true">
+            <mat-icon>school</mat-icon>
+          </span>
+          <div>
+            <h2>Academic information</h2>
+            <p>Speciality used across enrollments.</p>
+          </div>
+        </header>
+  
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Speciality</mat-label>
+            <input matInput formControlName="speciality" maxlength="100" />
+            @if (form.controls.speciality.hasError('required')) {
+              <mat-error>Speciality is required</mat-error>
+            }
+          </mat-form-field>
+  
+        </div>
+      </section>
+  
+      <div class="form-actions">
+        <a mat-stroked-button routerLink="/teachers">Cancel</a>
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="loading() || loadingData()"
+        >
+          <mat-icon>{{ isEditMode ? 'save' : 'person_add' }}</mat-icon>
+          {{ loading() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create teacher' }}
+        </button>
+      </div>
+    </form>
+  </section>
+  

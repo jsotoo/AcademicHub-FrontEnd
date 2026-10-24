@@ -1,0 +1,71 @@
+<section class="section-detail">
+    <app-page-header
+      [title]="detailTitle()"
+      description="Section information."
+    >
+      <a mat-stroked-button routerLink="/sections">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </a>
+    </app-page-header>
+  
+    @if (loadingData()) {
+      <div class="detail-card detail-card--loading" aria-hidden="true">
+        <div class="detail-skeleton detail-skeleton--title"></div>
+        <div class="detail-skeleton"></div>
+        <div class="detail-skeleton"></div>
+        <div class="detail-skeleton detail-skeleton--short"></div>
+      </div>
+    } @else if (section(); as section) {
+      <article class="detail-hero">
+        <div class="detail-hero__identity">
+          <div>
+            <h2> {{ section.code }} </h2>
+       
+          </div>
+        </div>
+      </article>
+  
+      <div class="detail-grid">
+        <section class="detail-card">
+          <header class="detail-card__header">
+            <span class="detail-card__icon" aria-hidden="true"><mat-icon>badge</mat-icon></span>
+            <h3>Section information</h3>
+          </header>
+          <dl>
+            <div>
+              <dt>Course Name</dt>
+              <dd>{{ section.courseName }}</dd>
+            </div>
+            <div>
+              <dt>Teacher Name</dt>
+              <dd>{{ section.teacherName }}</dd>
+            </div>
+            <div>
+              <dt>Academic Term</dt>
+              <dd>{{ section.academicTermName }}</dd>
+            </div>
+            <div>
+              <dt>Max Capacity</dt>
+              <dd>{{ section.maxCapacity }}</dd>
+            </div>
+            <div>
+              <dt>Available Capacity</dt>
+              <dd>{{ section.availableCapacity }}</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+  
+      <footer class="detail-meta">
+        <span>Created by {{ section.createdBy || '—' }}</span>
+        <span>{{ section.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+      </footer>
+    } @else {
+      <div class="detail-card detail-card--empty">
+        <mat-icon>school_off</mat-icon>
+        <p>This section could not be loaded.</p>
+      </div>
+    }
+  </section>
+  

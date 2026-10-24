@@ -1,0 +1,81 @@
+<section class="schedule-detail">
+  <app-page-header [title]="detailTitle()" description="Section, day, time and classroom.">
+    <a mat-stroked-button routerLink="/schedules">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <div class="detail-card detail-card--loading" aria-hidden="true">
+      <div class="detail-skeleton detail-skeleton--title"></div>
+      <div class="detail-skeleton"></div>
+      <div class="detail-skeleton detail-skeleton--short"></div>
+    </div>
+  } @else if (schedule(); as current) {
+    <article class="detail-hero">
+      <div class="detail-hero__identity">
+        <div>
+          <p class="detail-hero__code">{{ section()?.code || ('Section #' + current.sectionId) }}</p>
+          <h2>{{ dayName(current.dayOfWeek) }} · {{ clock(current.startTime) }} – {{ clock(current.endTime) }}</h2>
+        </div>
+      </div>
+      <span class="detail-status detail-status--active">{{ current.classroom }}</span>
+    </article>
+    <div class="detail-grid">
+      <section class="detail-card">
+        <header class="detail-card__header">
+          <span class="detail-card__icon" aria-hidden="true"><mat-icon>class</mat-icon></span>
+          <h3>Section</h3>
+        </header>
+        <dl>
+          <div>
+            <dt>Code</dt>
+            <dd>{{ section()?.code || current.sectionId }}</dd>
+          </div>
+          <div>
+            <dt>Course</dt>
+            <dd>{{ section()?.courseName || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Teacher</dt>
+            <dd>{{ section()?.teacherName || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Term</dt>
+            <dd>{{ section()?.academicTermName || '—' }}</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="detail-card">
+        <header class="detail-card__header">
+          <span class="detail-card__icon" aria-hidden="true"><mat-icon>schedule</mat-icon></span>
+          <h3>Slot</h3>
+        </header>
+        <dl>
+          <div>
+            <dt>Day</dt>
+            <dd>{{ dayName(current.dayOfWeek) }}</dd>
+          </div>
+          <div>
+            <dt>Start</dt>
+            <dd>{{ clock(current.startTime) }}</dd>
+          </div>
+          <div>
+            <dt>End</dt>
+            <dd>{{ clock(current.endTime) }}</dd>
+          </div>
+          <div>
+            <dt>Classroom</dt>
+            <dd>{{ current.classroom }}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+  } @else {
+    <div class="detail-card detail-card--empty">
+      <mat-icon>event_busy</mat-icon>
+      <p>This schedule could not be loaded.</p>
+    </div>
+  }
+</section>

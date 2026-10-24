@@ -1,0 +1,66 @@
+<section class="academic-term-form-page">
+  <app-page-header [title]="title" [description]="description">
+    <a mat-stroked-button routerLink="/academic-terms">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <mat-progress-bar class="academic-term-form-page__progress" mode="indeterminate" />
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="academic-term-form" novalidate>
+    <section class="form-card">
+      <header class="form-card__header">
+        <span class="form-card__icon" aria-hidden="true"><mat-icon>calendar_month</mat-icon></span>
+        <div>
+          <h2>Term information</h2>
+          <p>Name and date range of the academic period.</p>
+        </div>
+      </header>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" maxlength="100" />
+          @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+            <mat-error>Name is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Start date</mat-label>
+          <input matInput type="date" formControlName="startDate" />
+          @if (form.controls.startDate.hasError('required') && form.controls.startDate.touched) {
+            <mat-error>Start date is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>End date</mat-label>
+          <input matInput type="date" formControlName="endDate" />
+          @if (form.controls.endDate.hasError('required') && form.controls.endDate.touched) {
+            <mat-error>End date is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      @if (loaded(); as current) {
+        <div class="detail-card">
+          <dl>
+            <div>
+              <dt>Status</dt>
+              <dd>{{ current.termStatus }}</dd>
+            </div>
+          </dl>
+        </div>
+      }
+    </section>
+    <div class="form-actions">
+      <a mat-stroked-button routerLink="/academic-terms">Cancel</a>
+      @if (loaded()?.termStatus !== 'Closed') {
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading() || loadingData()">
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ loading() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create term' }}
+        </button>
+      }
+    </div>
+  </form>
+</section>

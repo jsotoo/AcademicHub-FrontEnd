@@ -1,0 +1,85 @@
+<section class="enrollment-detail">
+  <app-page-header
+    [title]="detailTitle()"
+    description="Student, term and enrollment status."
+  >
+    <a mat-stroked-button routerLink="/enrollments">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <div class="detail-card detail-card--loading" aria-hidden="true">
+      <div class="detail-skeleton detail-skeleton--title"></div>
+      <div class="detail-skeleton"></div>
+      <div class="detail-skeleton"></div>
+      <div class="detail-skeleton detail-skeleton--short"></div>
+    </div>
+  } @else if (enrollment(); as current) {
+    <article class="detail-hero">
+      <div class="detail-hero__identity">
+        <span class="detail-hero__avatar" aria-hidden="true">
+          {{ initials() }}
+        </span>
+        <div>
+          <p class="detail-hero__code">{{ studentCode() || 'Enrollment' }}</p>
+          <h2>{{ studentName() || 'Student' }}</h2>
+          <p class="detail-hero__user">{{ termName() }}</p>
+        </div>
+      </div>
+      <span class="detail-status" [class.detail-status--active]="current.enrollmentStatus === 'Confirmed'">
+        {{ current.enrollmentStatus }}
+      </span>
+    </article>
+
+    <div class="detail-grid">
+      <section class="detail-card">
+        <header class="detail-card__header">
+          <span class="detail-card__icon" aria-hidden="true"><mat-icon>person</mat-icon></span>
+          <h3>Student</h3>
+        </header>
+        <dl>
+          <div>
+            <dt>Code</dt>
+            <dd>{{ studentCode() || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Name</dt>
+            <dd>{{ studentName() || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Major</dt>
+            <dd>{{ majorName() || '—' }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="detail-card">
+        <header class="detail-card__header">
+          <span class="detail-card__icon" aria-hidden="true"><mat-icon>event</mat-icon></span>
+          <h3>Enrollment</h3>
+        </header>
+        <dl>
+          <div>
+            <dt>Academic term</dt>
+            <dd>{{ termName() || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Date</dt>
+            <dd>{{ current.enrollmentDate | date:'dd/MM/yyyy' }}</dd>
+          </div>
+          <div>
+            <dt>Total credits</dt>
+            <dd>{{ current.totalCredits }}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+  } @else {
+    <div class="detail-card detail-card--empty">
+      <mat-icon>assignment_late</mat-icon>
+      <p>This enrollment could not be loaded.</p>
+    </div>
+  }
+</section>

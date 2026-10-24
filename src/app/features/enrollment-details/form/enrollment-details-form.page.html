@@ -1,0 +1,86 @@
+<section class="enrollment-detail-form-page">
+  <app-page-header [title]="title" [description]="description">
+    <a mat-stroked-button routerLink="/enrollment-details">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <mat-progress-bar class="enrollment-detail-form-page__progress" mode="indeterminate" />
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="enrollment-detail-form" novalidate>
+    <section class="form-card">
+      <header class="form-card__header">
+        <span class="form-card__icon" aria-hidden="true">
+          <mat-icon>class</mat-icon>
+        </span>
+        <div>
+          <h2>Course registration</h2>
+          <p>The student comes from the enrollment. The section is the course group.</p>
+        </div>
+      </header>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Student enrollment</mat-label>
+          <mat-select formControlName="enrollmentId">
+            @for (enrollment of enrollments(); track enrollment.id) {
+              <mat-option [value]="enrollment.id">
+                {{ enrollment.studentCode }} · {{ enrollment.studentName }} · {{ enrollment.academicTermName }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (form.controls.enrollmentId.hasError('required') && form.controls.enrollmentId.touched) {
+            <mat-error>Student enrollment is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Section</mat-label>
+          <mat-select formControlName="sectionId">
+            @for (section of sections(); track section.id) {
+              <mat-option [value]="section.id">
+                {{ section.code }} · {{ section.courseName }} · {{ section.teacherName }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (form.controls.sectionId.hasError('required') && form.controls.sectionId.touched) {
+            <mat-error>Section is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      @if (isEditMode && loaded(); as current) {
+        <div class="detail-card">
+          <dl>
+            <div>
+              <dt>Registered</dt>
+              <dd>{{ current.registeredAt | date:'dd/MM/yyyy HH:mm' }}</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{{ current.detailStatus }}</dd>
+            </div>
+          </dl>
+        </div>
+      }
+    </section>
+
+    <div class="form-actions">
+      <a mat-stroked-button routerLink="/enrollment-details">Cancel</a>
+      @if (!isEditMode) {
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading() || loadingData()">
+          <mat-icon>add</mat-icon>
+          {{ loading() ? 'Saving...' : 'Register course' }}
+        </button>
+      } @else if (loaded()?.detailStatus === 'Registered') {
+        <button mat-flat-button color="primary" type="button" [disabled]="loading()" (click)="drop()">
+          <mat-icon>remove_circle</mat-icon>
+          {{ loading() ? 'Saving...' : 'Drop course' }}
+        </button>
+      }
+    </div>
+  </form>
+</section>

@@ -1,0 +1,90 @@
+<section class="student-detail">
+  <app-page-header
+    [title]="detailTitle()"
+    description="Profile, contact and academic record."
+  >
+    <a mat-stroked-button routerLink="/students">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <div class="detail-card detail-card--loading" aria-hidden="true">
+      <div class="detail-skeleton detail-skeleton--title"></div>
+      <div class="detail-skeleton"></div>
+      <div class="detail-skeleton"></div>
+      <div class="detail-skeleton detail-skeleton--short"></div>
+    </div>
+  } @else if (student(); as student) {
+    <article class="detail-hero">
+      <div class="detail-hero__identity">
+        <span class="detail-hero__avatar" aria-hidden="true">
+          {{ student.firstName.charAt(0) }}{{ student.lastName.charAt(0) }}
+        </span>
+        <div>
+          <p class="detail-hero__code">{{ student.code }}</p>
+          <h2>{{ student.firstName }} {{ student.lastName }}</h2>
+          <p class="detail-hero__user">{{ student.userName }}</p>
+        </div>
+      </div>
+      <span class="detail-status" [class.detail-status--active]="student.academicStatus === 'Active'">
+        {{ student.academicStatus }}
+      </span>
+    </article>
+
+    <div class="detail-grid">
+      <section class="detail-card">
+        <header class="detail-card__header">
+          <span class="detail-card__icon" aria-hidden="true"><mat-icon>badge</mat-icon></span>
+          <h3>Personal information</h3>
+        </header>
+        <dl>
+          <div>
+            <dt>Email</dt>
+            <dd>{{ student.email }}</dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd>{{ student.phoneNumber }}</dd>
+          </div>
+          <div>
+            <dt>Address</dt>
+            <dd>{{ student.address }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="detail-card">
+        <header class="detail-card__header">
+          <span class="detail-card__icon" aria-hidden="true"><mat-icon>school</mat-icon></span>
+          <h3>Academic information</h3>
+        </header>
+        <dl>
+          <div>
+            <dt>Code</dt>
+            <dd>{{ student.code }}</dd>
+          </div>
+          <div>
+            <dt>Major</dt>
+            <dd>{{ student.majorName }}</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>{{ student.academicStatus }}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+
+    <footer class="detail-meta">
+      <span>Created by {{ student.createdBy || '—' }}</span>
+      <span>{{ student.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+    </footer>
+  } @else {
+    <div class="detail-card detail-card--empty">
+      <mat-icon>person_off</mat-icon>
+      <p>This student could not be loaded.</p>
+    </div>
+  }
+</section>

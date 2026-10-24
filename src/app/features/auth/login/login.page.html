@@ -1,0 +1,86 @@
+<div class="login-container">
+    <mat-card class="login-card">
+        <mat-card-header>
+            <div class="login-card__logo">
+                <mat-icon class="login-card__icon">book</mat-icon>
+                <h1 class="login-card__title">AcademicHub</h1>
+            </div>
+            <mat-card-subtitle>Ingresar a tu cuenta</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            @if(sessionExpiredMessage)
+            {
+                <div class="alert alert--warning" role="alert" aria-live="polite">
+                    <mat-icon>warning</mat-icon>
+                    <span>Tu sesión expiró. por favor, vuelve a iniciar sesión.</span>
+                </div>
+            }
+
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Usuario</mat-label>
+                    <input 
+                        matInput
+                        formControlName="userName"
+                        autocomplete="username"
+                        aria-label="Nombre de usuario"
+                        placeholder="Ej: admin"
+                    />
+                    @if(form.get('userName')?.hasError('required') && form.get('userName')?.touched)
+                    {
+                        <mat-error>El usuario es requerido</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Contraseña</mat-label>
+                    <input 
+                        matInput
+                        [type]="hidePassword ? 'password' : 'text'"
+                        formControlName="password"
+                        autocomplete="current-password"
+                        aria-label="Contraseña"
+                    />
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        type="button"
+                        (click)="hidePassword = !hidePassword"
+                        [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'ocultar contraseña'"
+                    >
+                        <mat-icon>{{ !hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    @if(form.get('password')?.hasError('required') && form.get('userName')?.touched)
+                    {
+                        <mat-error>La contraseña es requerida</mat-error>
+                    }
+
+                    @if(form.get('password')?.hasError('minlength') && form.get('userName')?.touched)
+                    {
+                        <mat-error>Mínimo 4 caracteres</mat-error>
+                    }
+                </mat-form-field>
+
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="full-width login-btn"
+                    [disabled]="form.invalid || loading"
+            >
+                @if(loading)
+                {
+                    <mat-spinner diameter="20"></mat-spinner>
+                }
+                @else
+                {
+                    Iniciar sesión
+                }
+            </button>
+            </form>
+        </mat-card-content>
+
+
+    </mat-card>
+</div>

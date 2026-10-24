@@ -1,0 +1,92 @@
+<section class="enrollment-form-page">
+  <app-page-header [title]="title" [description]="description">
+    <a mat-stroked-button routerLink="/enrollments">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <mat-progress-bar class="enrollment-form-page__progress" mode="indeterminate" />
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="enrollment-form" novalidate>
+    <section class="form-card">
+      <header class="form-card__header">
+        <span class="form-card__icon" aria-hidden="true">
+          <mat-icon>assignment</mat-icon>
+        </span>
+        <div>
+          <h2>Enrollment information</h2>
+          <p>Student, academic term, date, credits and status.</p>
+        </div>
+      </header>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Student</mat-label>
+          <mat-select formControlName="studentId">
+            @for (s of students(); track s.id) {
+              <mat-option [value]="s.id">{{ s.code }} · {{ s.fullName }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.studentId.hasError('required')) {
+            <mat-error>Student is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Academic term</mat-label>
+          <mat-select formControlName="academicTermId">
+            @for (a of academicTerms(); track a.id) {
+              <mat-option [value]="a.id">{{ a.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.academicTermId.hasError('required') ) {
+            <mat-error>Academic term is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+ 
+      <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Enrollment date</mat-label>
+            <input matInput formControlName="enrollmentDate" type="date" />
+            @if (form.controls.enrollmentDate.hasError('required')) {
+              <mat-error>Enrollment date is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Total credits</mat-label>
+            <input matInput formControlName="totalCredits" type="number" />
+            @if (form.controls.totalCredits.hasError('required')) {
+              <mat-error>Total credits is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Enrollment status</mat-label>
+            <mat-select formControlName="enrollmentStatus">
+              <mat-option value="Draft">Draft</mat-option>
+              <mat-option value="Confirmed">Confirmed</mat-option>
+              <mat-option value="Cancelled">Cancelled</mat-option>
+            </mat-select>
+            @if (form.controls.enrollmentStatus.hasError('required')) {
+              <mat-error>Enrollment status is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      
+    </section>
+
+    <div class="form-actions">
+      <a mat-stroked-button routerLink="/enrollments">Cancel</a>
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading() || loadingData()">
+        <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+        {{ loading() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create enrollment' }}
+      </button>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,58 @@
+:host {
+    display: block;
+  }
+  
+  .toolbar {
+    background-color: var(--color-primary-dark);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  
+    &__brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  
+    &__logo-icon {
+      color: white;
+    }
+  
+    &__logo-text {
+      display: none;
+      @media (min-width: 600px) {
+        display: inline;
+      }
+    }
+  
+    &__spacer {
+      flex: 1;
+    }
+  
+    &__user-btn {
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  
+    &__username {
+      display: none;
+      @media (min-width: 600px) {
+        display: inline;
+      }
+    }
+  
+    .mat-mdc-icon-button {
+      color: #fff;
+    }
+  }
+  
+  .user-menu-header {
+    font-size: 0.8rem;
+    color: var(--mat-sys-outline);
+  }

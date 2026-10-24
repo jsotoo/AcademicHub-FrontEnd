@@ -1,0 +1,118 @@
+<section class="teachers-page">
+    <header class="teachers-header">
+      <div class="teachers-header__copy">
+        <h1 class="teachers-title">Teachers</h1>
+        <p class="teachers-subtitle">Directory of teachers, with specialities and contact information.</p>
+      </div>
+  
+      @if (isAdmin()) {
+        <button
+          mat-flat-button
+          class="teachers-add"
+          routerLink="/teachers/new"
+        >
+          <mat-icon>add</mat-icon>
+          Add teacher
+        </button>
+      }
+    </header>
+  
+    @if (loading()) {
+      <div class="teachers-card table-skeleton" aria-hidden="true">
+        <div class="table-skeleton__head"></div>
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+          <div class="table-skeleton__row"></div>
+        }
+      </div>
+    } @else if (dataSource.data.length === 0) {
+      <div class="teachers-card teachers-card--empty">
+        <app-empty-state
+          icon="school"
+          title="No teachers found"
+          message="There are no teachers available in the system"
+        ></app-empty-state>
+      </div>
+    } @else {
+      <div class="teachers-card">
+        <div class="teachers-table-wrap">
+          <table mat-table class="teachers-table" [dataSource]="dataSource" aria-label="List of teachers">
+            <ng-container matColumnDef="Full Name">
+              <th mat-header-cell *matHeaderCellDef>Full name</th>
+              <td mat-cell *matCellDef="let p">
+                <span class="name">{{ p.fullName }}</span>
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let p">
+                <span class="muted">{{ p.email }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Speciality">
+              <th mat-header-cell *matHeaderCellDef>Speciality</th>
+              <td mat-cell *matCellDef="let p">{{ p.speciality }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Phone Number">
+              <th mat-header-cell *matHeaderCellDef>Phone</th>
+              <td mat-cell *matCellDef="let p">
+                <span class="muted">{{ p.phoneNumber }}</span>
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions</th>
+              <td mat-cell *matCellDef="let p">
+                <button
+                  mat-icon-button
+                  class="action-btn"
+                  matTooltip="See details"
+                  [routerLink]="['/teachers', p.id, 'detail']"
+                  aria-label="See details of the teacher"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+  
+                @if (isAdmin()) {
+                  <button
+                    mat-icon-button
+                    class="action-btn"
+                    matTooltip="Edit"
+                    (click)="editTeacher(p.id)"
+                    aria-label="Edit the teacher"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    class="action-btn"
+                    matTooltip="Delete"
+                    aria-label="Delete the teacher"
+                    (click)="confirmDeleteTeacher(p)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+  
+        <mat-paginator
+          class="teachers-paginator"
+          [length]="totalItems"
+          [pageSize]="pageSize"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="[5, 10, 25]"
+          (page)="onPageChange($event)"
+          aria-label="Pagination of students"
+        />
+      </div>
+    }
+  </section>
+  

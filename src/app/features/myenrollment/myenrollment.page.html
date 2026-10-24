@@ -1,0 +1,104 @@
+<app-page-header
+  [title]="'My enrollment'"
+  [description]="'Your courses for the current academic term'"
+></app-page-header>
+ 
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+ 
+@if (!loading()) {
+ 
+  @if (current(); as e) {
+    <!-- MAESTRO: la matricula -->
+    <section class="card summary">
+      <div class="summary-item">
+        <span class="label">Term</span>
+        <span class="value">{{ e.academicTermName }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Status</span>
+        <span [class]="statusClass(e.enrollmentStatus)">{{ e.enrollmentStatus }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Enrolled on</span>
+        <span class="value">{{ e.enrollmentDate | date: 'mediumDate' }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Total credits</span>
+        <span class="value">{{ e.totalCredits }}</span>
+      </div>
+    </section>
+ 
+    <!-- DETALLE: los cursos -->
+    <section class="card">
+      <h3 class="section-title">Enrolled courses ({{ e.courses.length }})</h3>
+ 
+      @if (e.courses.length === 0) {
+        <p class="muted">You have no courses registered in this enrollment yet.</p>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Course</th>
+              <th>Teacher</th>
+              <th>Schedule</th>
+              <th class="num">Credits</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of e.courses; track c.detailId) {
+              <tr>
+                <td>{{ c.sectionCode }}</td>
+                <td>{{ c.courseName }}</td>
+                <td>{{ c.teacherName }}</td>
+                <td>
+                  @if (!c.schedules?.length) {
+                    <span class="muted">No schedule</span>
+                  } @else {
+                    @for (s of c.schedules; track $index) {
+                      <div>{{ formatSchedule(s) }}</div>
+                    }
+                  }
+                </td>
+                <td class="num">{{ c.credits }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  } @else {
+    <section class="card empty">
+      <mat-icon>assignment</mat-icon>
+      <p>You are not enrolled in the current term yet.</p>
+    </section>
+  }
+ 
+  @if (history().length > 0) {
+    <section class="card">
+      <h3 class="section-title">Previous enrollments</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th class="num">Credits</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (h of history(); track h.id) {
+            <tr>
+              <td>{{ h.academicTermName }}</td>
+              <td><span [class]="statusClass(h.enrollmentStatus)">{{ h.enrollmentStatus }}</span></td>
+              <td>{{ h.enrollmentDate | date: 'mediumDate' }}</td>
+              <td class="num">{{ h.totalCredits }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+}

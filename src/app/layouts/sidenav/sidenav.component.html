@@ -1,0 +1,14 @@
+<mat-nav-list class="sidenav">
+  @for (link of visibleItems(); track link.route) {
+    <a
+      mat-list-item
+      [routerLink]="link.route"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: false }"
+      [attr.aria-label]="link.label"
+    >
+      <mat-icon matListItemIcon>{{ link.icon }}</mat-icon>
+      <span matListItemTitle class="nav-label">{{ link.label }}</span>
+    </a>
+  }
+</mat-nav-list>

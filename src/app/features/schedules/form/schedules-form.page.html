@@ -1,0 +1,73 @@
+<section class="schedule-form-page">
+  <app-page-header [title]="title" [description]="description">
+    <a mat-stroked-button routerLink="/schedules">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </a>
+  </app-page-header>
+
+  @if (loadingData()) {
+    <mat-progress-bar class="schedule-form-page__progress" mode="indeterminate" />
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="schedule-form" novalidate>
+    <section class="form-card">
+      <header class="form-card__header">
+        <span class="form-card__icon" aria-hidden="true"><mat-icon>schedule</mat-icon></span>
+        <div>
+          <h2>Class slot</h2>
+          <p>Section, day, time and classroom.</p>
+        </div>
+      </header>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Section</mat-label>
+          <mat-select formControlName="sectionId">
+            @for (section of sections(); track section.id) {
+              <mat-option [value]="section.id">{{ section.code }} · {{ section.courseName }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.sectionId.hasError('required') && form.controls.sectionId.touched) {
+            <mat-error>Section is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Day</mat-label>
+          <mat-select formControlName="dayOfWeek">
+            @for (day of days; track day.value) {
+              <mat-option [value]="day.value">{{ day.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Start time</mat-label>
+          <input matInput type="time" formControlName="startTime" />
+          @if (form.controls.startTime.hasError('required') && form.controls.startTime.touched) {
+            <mat-error>Start time is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>End time</mat-label>
+          <input matInput type="time" formControlName="endTime" />
+          @if (form.controls.endTime.hasError('required') && form.controls.endTime.touched) {
+            <mat-error>End time is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Classroom</mat-label>
+          <input matInput formControlName="classroom" maxlength="50" />
+          @if (form.controls.classroom.hasError('required') && form.controls.classroom.touched) {
+            <mat-error>Classroom is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </section>
+    <div class="form-actions">
+      <a mat-stroked-button routerLink="/schedules">Cancel</a>
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading() || loadingData()">
+        <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+        {{ loading() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create schedule' }}
+      </button>
+    </div>
+  </form>
+</section>

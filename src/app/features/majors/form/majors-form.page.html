@@ -1,0 +1,72 @@
+<section class="major-form-page">
+    <app-page-header [title]="title" [description]="description">
+      <a mat-stroked-button routerLink="/majors">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </a>
+    </app-page-header>
+  
+    @if (loadingData()) {
+      <mat-progress-bar class="major-form-page__progress" mode="indeterminate" />
+    }
+  
+    <form [formGroup]="form" (ngSubmit)="submit()" class="major-form" novalidate>
+     
+      <section class="form-card">
+        <header class="form-card__header">
+          <span class="form-card__icon" aria-hidden="true">
+            <mat-icon>badge</mat-icon>
+          </span>
+          <div>
+            <h2>Major information</h2>
+            <p>Code, name and description of the academic program.</p>
+          </div>
+        </header>
+  
+        <div class="form-grid">
+            <mat-form-field appearance="outline">
+                <mat-label>Code</mat-label>
+                <mat-icon matPrefix>tag</mat-icon>
+                <input matInput formControlName="code" maxlength="20" />
+                @if (isEditMode) {
+                  <mat-hint>The code cannot be changed</mat-hint>
+                }
+                @if (form.controls.code.hasError('required')) {
+                  <mat-error>Code is required</mat-error>
+                }
+              </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label> Name</mat-label>
+            <input matInput formControlName="name" maxlength="100" />
+            @if (form.controls.name.hasError('required')) {
+              <mat-error>Name is required</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput type="text" formControlName="description" maxlength="255" />
+            @if (form.controls.description.hasError('required')) {
+              <mat-error>Description is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </section>
+  
+
+      <div class="form-actions">
+        <a mat-stroked-button routerLink="/majors">Cancel</a>
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="loading() || loadingData()"
+        >
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ loading() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create major' }}
+        </button>
+      </div>
+    </form>
+  </section>
+  

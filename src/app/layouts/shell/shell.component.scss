@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.shell {
+  height: 100%;
+}
+
+.shell-container {
+  height: 100%;
+  background: transparent;
+}
+
+.shell-sidenav {
+  width: 240px;
+  background: var(--color-sidebar);
+  border-right: 1px solid rgba(25, 118, 210, 0.1);
+  border-radius: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+:host ::ng-deep .shell-sidenav .mat-drawer-inner-container {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.shell-content {
+  background: transparent;
+}
+
+.shell-main {
+  min-height: 100%;
+  box-sizing: border-box;
+}

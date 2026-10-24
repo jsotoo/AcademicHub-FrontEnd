@@ -1,0 +1,233 @@
+:host {
+    display: block;
+  }
+  
+  .major-detail {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 28px 24px 48px;
+    box-sizing: border-box;
+  }
+  
+  .detail-hero,
+  .detail-card,
+  .detail-meta {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+  
+  .detail-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 20px;
+  }
+  
+  .detail-hero__identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+  
+  .detail-hero__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  
+  .detail-hero__code {
+    margin: 0 0 4px;
+    color: var(--color-primary-dark);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  
+  .detail-hero h2 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+  }
+  
+  .detail-hero__user {
+    margin: 4px 0 0;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+  }
+  
+  .detail-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: #eef2f7;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  
+  .detail-status--active {
+    background: #dcfce7;
+    color: #15803d;
+  }
+  
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  
+  .detail-card {
+    padding: 18px 20px 8px;
+  }
+  
+  .detail-card__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .detail-card__header h3 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+  }
+  
+  .detail-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+  
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  dl {
+    margin: 0;
+  }
+  
+  dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--color-border-light);
+  }
+  
+  dt {
+    color: var(--color-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  
+  dd {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+  }
+  
+  .detail-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 14px 20px;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+  }
+  
+  .detail-card--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 20px;
+    color: var(--color-text-secondary);
+    text-align: center;
+  
+    mat-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      color: var(--color-text-muted);
+    }
+  }
+  
+  .detail-skeleton {
+    height: 16px;
+    margin: 14px 0;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #eef2f7 25%, #f8fafc 37%, #eef2f7 63%);
+    background-size: 800px 100%;
+    animation: detail-shimmer 1.4s ease infinite;
+  }
+  
+  .detail-skeleton--title {
+    width: 46%;
+    height: 22px;
+  }
+  
+  .detail-skeleton--short {
+    width: 62%;
+  }
+  
+  .detail-card--loading {
+    padding: 22px 20px;
+  }
+  
+  @keyframes detail-shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  
+  @media (max-width: 720px) {
+    .course-detail {
+      padding: 20px 16px 32px;
+    }
+  
+    .detail-hero,
+    .detail-meta,
+    dl div {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    dd {
+      text-align: left;
+    }
+  }
+  

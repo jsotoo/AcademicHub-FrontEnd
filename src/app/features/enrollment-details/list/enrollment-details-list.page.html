@@ -1,0 +1,129 @@
+<section class="enrollment-details-page">
+  <header class="enrollment-details-header">
+    <div class="enrollment-details-header__copy">
+      <h1 class="enrollment-details-title">Enrollment details</h1>
+      <p class="enrollment-details-subtitle">Courses registered on each student enrollment.</p>
+    </div>
+
+    @if (isAdmin()) {
+      <button mat-flat-button class="enrollment-details-add" routerLink="/enrollment-details/new">
+        <mat-icon>add</mat-icon>
+        Register course
+      </button>
+    }
+  </header>
+
+  @if (loading()) {
+    <div class="enrollment-details-card table-skeleton" aria-hidden="true">
+      <div class="table-skeleton__head"></div>
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+        <div class="table-skeleton__row"></div>
+      }
+    </div>
+  } @else if (dataSource.data.length === 0) {
+    <div class="enrollment-details-card enrollment-details-card--empty">
+      <app-empty-state
+        icon="class"
+        title="No enrollment details found"
+        message="There are no courses registered on enrollments yet"
+      ></app-empty-state>
+    </div>
+  } @else {
+    <div class="enrollment-details-card">
+      <div class="enrollment-details-table-wrap">
+        <table mat-table class="enrollment-details-table" [dataSource]="dataSource" aria-label="Enrollment details">
+          <ng-container matColumnDef="studentCode">
+            <th mat-header-cell *matHeaderCellDef>Student code</th>
+            <td mat-cell *matCellDef="let row"><span class="code">{{ row.studentCode || '—' }}</span></td>
+          </ng-container>
+
+          <ng-container matColumnDef="studentName">
+            <th mat-header-cell *matHeaderCellDef>Student</th>
+            <td mat-cell *matCellDef="let row"><span class="name">{{ row.studentName || '—' }}</span></td>
+          </ng-container>
+
+          <ng-container matColumnDef="sectionCode">
+            <th mat-header-cell *matHeaderCellDef>Section</th>
+            <td mat-cell *matCellDef="let row"><span class="code">{{ row.sectionCode || row.sectionId }}</span></td>
+          </ng-container>
+
+          <ng-container matColumnDef="courseName">
+            <th mat-header-cell *matHeaderCellDef>Course</th>
+            <td mat-cell *matCellDef="let row">{{ row.courseName || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="registeredAt">
+            <th mat-header-cell *matHeaderCellDef>Registered</th>
+            <td mat-cell *matCellDef="let row">{{ row.registeredAt | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="detailStatus">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="status" [class.status--active]="row.detailStatus === 'Registered'">{{ row.detailStatus }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let row">
+              <button
+                mat-icon-button
+                class="action-btn"
+                matTooltip="See details"
+                [routerLink]="['/enrollment-details', row.id, 'detail']"
+                aria-label="See enrollment detail"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              @if (isAdmin()) {
+                <button
+                  mat-icon-button
+                  class="action-btn"
+                  matTooltip="Edit"
+                  (click)="editDetail(row.id)"
+                  aria-label="Edit enrollment detail"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                @if (row.detailStatus === 'Registered') {
+                  <button
+                    mat-icon-button
+                    class="action-btn"
+                    matTooltip="Drop course"
+                    (click)="confirmDrop(row)"
+                    aria-label="Drop course"
+                  >
+                    <mat-icon>remove_circle</mat-icon>
+                  </button>
+                }
+                <button
+                  mat-icon-button
+                  class="action-btn"
+                  matTooltip="Delete"
+                  (click)="confirmDelete(row)"
+                  aria-label="Delete enrollment detail"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
+      <mat-paginator
+        class="enrollment-details-paginator"
+        [length]="totalItems"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)"
+        aria-label="Pagination of enrollment details"
+      />
+    </div>
+  }
+</section>

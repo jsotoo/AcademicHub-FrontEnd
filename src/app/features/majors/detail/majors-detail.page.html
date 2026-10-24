@@ -1,0 +1,66 @@
+<section class="major-detail">
+    <app-page-header
+      [title]="detailTitle()"
+      description="Details of the major"
+    >
+      <a mat-stroked-button routerLink="/majors">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </a>
+    </app-page-header>
+  
+    @if (loadingData()) {
+      <div class="detail-card detail-card--loading" aria-hidden="true">
+        <div class="detail-skeleton detail-skeleton--title"></div>
+        <div class="detail-skeleton"></div>
+        <div class="detail-skeleton"></div>
+        <div class="detail-skeleton detail-skeleton--short"></div>
+      </div>
+    } @else if (major(); as current) {
+      <article class="detail-hero">
+        <div class="detail-hero__identity">
+          <span class="detail-hero__avatar" aria-hidden="true">
+            {{ current.name }}
+          </span>
+          <div>
+            <p class="detail-hero__code">{{ current.code }}</p>
+            <h2>{{ current.name }}</h2>
+          </div>
+        </div>
+      </article>
+  
+      <div class="detail-grid">
+        <section class="detail-card">
+          <header class="detail-card__header">
+            <span class="detail-card__icon" aria-hidden="true"><mat-icon>badge</mat-icon></span>
+            <h3>Major information</h3>
+          </header>
+          <dl>
+            <div>
+              <dt>Code</dt>
+              <dd>{{ current.code }}</dd>
+            </div>
+            <div>
+              <dt>Name</dt>
+              <dd>{{ current.name }}</dd>
+            </div>
+            <div>
+              <dt>Description</dt>
+              <dd>{{ current.description }}</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+  
+      <footer class="detail-meta">
+        <span>Created by {{ current.createdBy || '—' }}</span>
+        <span>{{ current.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+      </footer>
+    } @else {
+      <div class="detail-card detail-card--empty">
+        <mat-icon>school</mat-icon>
+        <p>This major could not be loaded.</p>
+      </div>
+    }
+  </section>
+  
